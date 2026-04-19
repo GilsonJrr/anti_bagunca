@@ -23,7 +23,7 @@ module.exports = {
     android: {
       package: "com.antibagunca.app",
       versionCode: 1,
-      googleServicesFile: "./google-services.json",
+      googleServicesFile: "./credentials/android/google-services.json",
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",
