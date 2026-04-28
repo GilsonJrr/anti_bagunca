@@ -19,6 +19,9 @@ module.exports = {
       supportsTablet: true,
       bundleIdentifier: "com.antibagunca.app",
       buildNumber: "1",
+      infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
+      },
     },
     android: {
       package: "com.antibagunca.app",

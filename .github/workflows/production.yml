@@ -6,6 +6,16 @@ on:
       - main
       - master
   workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform to build in production profile"
+        required: true
+        type: choice
+        default: android
+        options:
+          - android
+          - ios
+          - all
 
 jobs:
   build-production:
@@ -14,6 +24,7 @@ jobs:
     env:
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       EAS_PROJECT_ID: ${{ secrets.EAS_PROJECT_ID }}
+      EAS_BUILD_NO_EXPO_GO_WARNING: "true"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,5 +41,15 @@ jobs:
       - name: Setup EAS CLI
         run: npm install --global eas-cli
 
+      - name: Select platform
+        id: platform
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo "value=android" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${{ github.event.inputs.platform }}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Trigger production build
-        run: eas build --platform all --profile production --non-interactive
+        run: eas build --platform ${{ steps.platform.outputs.value }} --profile production --non-interactive
